@@ -6,15 +6,6 @@
 SCREEN_RESOLUTION="640x1136";
 SCREEN_COLOR_BITS=32;
 ISFIND = 0
-BUYTIME = 0
-ACTION = "空"
--- 远程获取需要行为
-function getAction(url)
---从http获取事件
-ACTION = "帮派任务"
-end
-
-
 -- 点击函数封装
 function click(x, y)
 	touchDown(0, x, y)
@@ -24,11 +15,11 @@ end
 
 -- 找图函数封装
 function findImage(dir,msg)
-	mSleep(500)
-	x, y = findImageFuzzy(dir, 80)	
+	mSleep(100)
+	x, y = findImageFuzzy(dir, 70)
     if x ~= -1 and y ~= -1 then    -- 如果x和y不等与-1，说明找到了
-	mSleep(500)	
     ISFIND = 1
+	mSleep(100)	
 	click(x+5,y+5)	
 	notifyMessage(msg)    -- 显示yes
     end	
@@ -42,59 +33,66 @@ end
 -- 点击购买-img
 function buy()
 findImage("/var/梦幻西游/购买.bmp", "购买")
-if ISFIND ~= 0 then
---发送事件到http
-end
 end
 
 -- 点击使用-img
 function use()
 findImage("/var/梦幻西游/使用.bmp", "使用")
-if ISFIND ~= 0 then
---发送事件到http
-end
 end
 
--- 点击切磋-img
-function pk()
-findImage("/var/梦幻西游/切磋.bmp", "切磋")
-if ISFIND ~= 0 then
---发送事件到http
-end
+-- 点击上交-img
+function handin()
+findImage("/var/梦幻西游/上交.bmp", "上交")
 end
 
--- 点击帮派任务-img
-function teamQuest()
+-- 点击确定-img
+function yes()
+findImage("/var/梦幻西游/确定.bmp", "确定")
+end
+
+-- 帮派任务-img
+function gang()
 findImage("/var/梦幻西游/帮派任务.bmp", "帮派任务")
-if ISFIND ~= 0 then
---发送事件到http
 end
 end
 
-
----test
--- 急速测试-请选择要做的事 自动选择第一个
+--点击第一事件；一般为
 function speedClick()
-	mSleep(50)
+	mSleep(100)
 	x, y = findImageFuzzy("/var/梦幻西游/选择.bmp", 80)	
     if x ~= -1 and y ~= -1 then
-	mSleep(500)	
-        touchDown(0, x-70, y+5)
-        touchUp(0) 
-        notifyMessage("选择第一个事件")
-  
+	ISFIND = 1
+	mSleep(100)	
+    touchDown(0, x-70, y+5)
+    touchUp(0) 
+    notifyMessage("选择第一个事件")
     end	
 end
 
+function doImg()
+	if ISFIND == 0 then
+	buy();--购买img
+	end
+	if ISFIND == 0 then
+	handin();--上交img
+	end	
+	if ISFIND == 0 then
+	yes();--确定img	
+	end	
+	if ISFIND == 0 then
+	use();--使用img
+	end	
+	if ISFIND == 0 then
+	gang();--帮派任务img
+	end	
+	if ISFIND == 0 then
+	speedClick();--急速测试
+	end	
+end	
+
+
 -- 主入口函数
 function main()
-	getAction('');
-	if ACTION == "帮派任务" then	
 	quest();
-	speedClick();--急速测试
-	--buy();--购买img
-	--use();--使用img
-	--pk();--切磋img	
-	--teamQuest();--帮派任务img	
-	end	
+	doImg();
 end
