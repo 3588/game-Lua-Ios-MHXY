@@ -1,0 +1,101 @@
+--帮派任务  
+--1.买东西
+
+
+-- 适用屏幕参数
+SCREEN_RESOLUTION="640x1136";
+SCREEN_COLOR_BITS=32;
+ISFIND = 0
+-- 点击函数封装
+function click(x, y)
+	touchDown(0, x, y)
+	mSleep(100)
+	touchUp(0)
+end
+
+-- 找图函数封装
+function findImage(dir,msg)
+	x, y = findImageFuzzy(dir, 70)
+    if x ~= -1 and y ~= -1 then    -- 如果x和y不等与-1，说明找到了
+    ISFIND = 1
+	mSleep(100)	
+	click(x+5,y+5)	
+	notifyMessage(msg)    -- 显示yes
+    end	
+end
+
+-- 点击任务栏
+function quest()
+	while true do	
+	click(360,1008)
+	mSleep(100) 
+	coroutine.yield();                                        -- 主动挂起自己
+	end	
+end
+
+-- 点击购买-img
+function buy()
+  while true do
+	findImage("/var/梦幻西游/购买.bmp", "购买")
+	mSleep(100) 
+	coroutine.yield();                                        -- 主动挂起自己
+    end
+end
+
+-- 点击使用-img
+function use()
+	while true do
+	findImage("/var/梦幻西游/使用.bmp", "使用")
+	mSleep(100) 
+	coroutine.yield();                                        -- 主动挂起自己
+    end		
+end
+
+-- 点击上交-img
+function handin()
+
+ while true do
+	findImage("/var/梦幻西游/上交.bmp", "上交")
+	mSleep(100) 
+	coroutine.yield();                                        -- 主动挂起自己
+    end
+end
+
+-- 点击确定-img
+function yes()
+
+ while true do
+	findImage("/var/梦幻西游/确定.bmp", "确定")
+	mSleep(100) 
+	coroutine.yield();                                        -- 主动挂起自己
+    end
+end
+
+-- 帮派任务-img
+function gang()
+
+ while true do
+	findImage("/var/梦幻西游/帮派任务.bmp", "帮派任务")
+	mSleep(100) 
+	coroutine.yield();                                        -- 主动挂起自己
+    end
+end
+
+-- 主入口函数
+function main()
+	co1 = coroutine.create(buy);
+	co2 = coroutine.create(use);
+	co3 = coroutine.create(handin);
+	co4 = coroutine.create(yes);
+	co5 = coroutine.create(gang);
+	co6 = coroutine.create(quest);	
+	  while true do
+        coroutine.resume(co1);
+        coroutine.resume(co2);
+        coroutine.resume(co3);
+        coroutine.resume(co4);
+        coroutine.resume(co5);
+		coroutine.resume(co6);		
+    end	
+	
+end
