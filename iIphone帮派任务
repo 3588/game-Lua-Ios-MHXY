@@ -1,11 +1,15 @@
---帮派任务  
---1.买东西
-
-
 -- 适用屏幕参数
 SCREEN_RESOLUTION="640x1136";
 SCREEN_COLOR_BITS=32;
 ISFIND = 0
+
+UI = {
+    { 'TextView{-自动任务测试阶段-}'                   },
+	{ 'TextView{-师门|帮派}'                   },
+	{ 'DropList{第一栏|第二栏|第三栏}',    'TaskBar', '点击的任务栏:' },  -- 借鉴用户 qq33357486		
+	{ 'TextView{-QQ:72012-}'                   },		
+};
+
 -- 点击函数封装
 function click(x, y)
 	touchDown(0, x, y)
@@ -27,7 +31,18 @@ end
 
 -- 点击任务栏
 function quest()
-	click(360,1008)
+	x,y =333,996
+	if TaskBar == "第一栏" then
+    x = 439
+    y = 960        
+	elseif TaskBar == "第二栏" then
+	x = 333
+	y = 996              
+    elseif TaskBar == "第三栏" then
+	x = 260
+	y = 996
+	end
+	click(x,y);
 end
 
 -- 点击购买-img
@@ -54,20 +69,6 @@ end
 function gang()
 findImage("/var/梦幻西游/帮派任务.bmp", "帮派任务")
 end
-end
-
---点击第一事件；一般为
-function speedClick()
-	mSleep(100)
-	x, y = findImageFuzzy("/var/梦幻西游/选择.bmp", 80)	
-    if x ~= -1 and y ~= -1 then
-	ISFIND = 1
-	mSleep(100)	
-    touchDown(0, x-70, y+5)
-    touchUp(0) 
-    notifyMessage("选择第一个事件")
-    end	
-end
 
 function doImg()
 	if ISFIND == 0 then
@@ -85,14 +86,13 @@ function doImg()
 	if ISFIND == 0 then
 	gang();--帮派任务img
 	end	
-	if ISFIND == 0 then
-	speedClick();--急速测试
-	end	
 end	
-
 
 -- 主入口函数
 function main()
+	while true do
 	quest();
+	mSleep(1000)	
 	doImg();
+	end	
 end
